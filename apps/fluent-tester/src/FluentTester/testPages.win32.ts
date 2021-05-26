@@ -3,6 +3,7 @@ import { ExperimentalButtonTest, HOMEPAGE_BUTTON_BUTTONEXPERIMENTAL } from './Te
 import { CalloutTest, HOMEPAGE_CALLOUT_BUTTON } from './TestComponents/Callout';
 import { CheckboxTest, HOMEPAGE_CHECKBOX_BUTTON } from './TestComponents/Checkbox';
 import { ContextualMenuTest, HOMEPAGE_CONTEXTUALMENU_BUTTON } from './TestComponents/ContextualMenu';
+import { DropdownTest, HOMEPAGE_DROPDOWN_BUTTON } from "./TestComponents/Dropdown";
 import { FocusTrapTest, HOMEPAGE_FOCUSTRAPZONE_BUTTON } from './TestComponents/FocusTrapZone';
 import { FocusZoneTest, HOMEPAGE_FOCUSZONE_BUTTON } from './TestComponents/FocusZone';
 import { HOMEPAGE_LINK_BUTTON, LinkTest } from './TestComponents/Link';
@@ -32,6 +33,11 @@ export const tests: TestDescription[] = [
     name: 'ContextualMenu Test',
     component: ContextualMenuTest,
     testPage: HOMEPAGE_CONTEXTUALMENU_BUTTON,
+  },
+  {
+    name: 'Dropdown Test',
+    component: DropdownTest,
+    testPage: HOMEPAGE_DROPDOWN_BUTTON,
   },
   {
     name: 'Focus Trap Zone Test',

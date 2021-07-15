@@ -1,8 +1,40 @@
 # Change Log - @fluentui/react-native
 
-This log was last generated on Wed, 07 Apr 2021 23:41:02 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Jul 2021 10:45:30 GMT and should not be manually modified.
 
 <!-- Start content -->
+
+## 0.24.0
+
+Tue, 13 Jul 2021 10:45:30 GMT
+
+### Minor changes
+
+- Added FluentUI Standard MenuButton (without Submenu items) (vkozlova@microsoft.com)
+
+## 0.23.15
+
+Fri, 18 Jun 2021 00:38:19 GMT
+
+### Patches
+
+- Apply prettier to libraries core and theming, run (ruaraki@microsoft.com)
+
+## 0.23.9
+
+Thu, 13 May 2021 06:18:23 GMT
+
+### Patches
+
+- Force a package update to sync npm version and repo version (sanajmi@microsoft.com)
+
+## 0.23.8
+
+Wed, 12 May 2021 10:34:05 GMT
+
+### Patches
+
+- patch (sanajmi@microsoft.com)
 
 ## 0.23.5
 

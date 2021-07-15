@@ -9,14 +9,31 @@ import { filterViewProps } from '@fluentui-react-native/adapters';
 import { settings, checkboxSelectActionLabel } from './Checkbox.settings';
 import { mergeSettings } from '@uifabricshared/foundation-settings';
 import { foregroundColorTokens, textTokens, borderTokens, getPaletteFromTheme } from '@fluentui-react-native/tokens';
-import { useAsToggle, useAsPressable, useViewCommandFocus, useKeyCallback } from '@fluentui-react-native/interactive-hooks';
+import {
+  useAsToggle,
+  useAsPressable,
+  useViewCommandFocus,
+  useKeyCallback,
+  useOnPressWithFocus,
+} from '@fluentui-react-native/interactive-hooks';
 import { backgroundColorTokens } from '@fluentui-react-native/tokens';
+import { IPressableProps } from '@fluentui-react-native/pressable';
 
 export const Checkbox = compose<ICheckboxType>({
   displayName: checkboxName,
 
   usePrepareProps: (userProps: ICheckboxProps, useStyling: IUseComposeStyling<ICheckboxType>) => {
-    const { ariaLabel, checked, defaultChecked, boxSide, disabled, label, onChange, ...rest } = userProps;
+    const {
+      ariaLabel,
+      checked,
+      defaultChecked,
+      boxSide,
+      disabled,
+      label,
+      onChange,
+      componentRef = React.useRef(null),
+      ...rest
+    } = userProps;
 
     // Warns defaultChecked and checked being mutually exclusive.
     if (defaultChecked != undefined && checked != undefined) {
@@ -26,16 +43,19 @@ export const Checkbox = compose<ICheckboxType>({
     // Re-usable hook for toggle components.
     const [isChecked, toggleChecked] = useAsToggle(defaultChecked, checked, onChange);
 
-    const pressable = useAsPressable({ onPress: toggleChecked, ...rest });
+    // Ensure focus is placed on checkbox after click
+    const toggleCheckedWithFocus = useOnPressWithFocus(componentRef, toggleChecked);
 
-    const buttonRef = useViewCommandFocus(userProps.componentRef);
+    const pressable = useAsPressable({ onPress: toggleCheckedWithFocus, ...(rest as IPressableProps) });
+
+    const buttonRef = useViewCommandFocus(componentRef);
 
     // Handles the "Space" key toggling the Checkbox
     const onKeyUpSpace = useKeyCallback(toggleChecked, ' ');
 
     const state: ICheckboxState = {
       ...pressable.state,
-      disabled,
+      disabled: !!disabled,
       checked: isChecked,
       boxAtEnd: boxSide == undefined || boxSide == 'start' ? false : true,
     };

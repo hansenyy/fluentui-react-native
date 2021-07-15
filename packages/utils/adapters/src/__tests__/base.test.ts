@@ -13,7 +13,7 @@ describe('Base filter tests', () => {
     expect(filterViewProps('children')).toBeTruthy();
     expect(filterViewProps('style')).toBeTruthy();
     expect(filterViewProps('accessible')).toBeTruthy();
-    expect(filterViewProps('animationClass')).toBeFalsy();
+    expect(filterViewProps('animationClass')).toBeTruthy();
   });
 
   test('filterImageProps works', () => {
@@ -21,5 +21,5 @@ describe('Base filter tests', () => {
     expect(filterImageProps('children')).toBeTruthy();
     expect(filterImageProps('style')).toBeTruthy();
     expect(filterImageProps('accessible')).toBeTruthy();
-  })
+  });
 });

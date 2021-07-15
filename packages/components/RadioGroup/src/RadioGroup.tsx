@@ -10,7 +10,7 @@ import {
   IRadioGroupState,
   IRadioGroupSlotProps,
   IRadioGroupRenderData,
-  IRadioGroupContext
+  IRadioGroupContext,
 } from './RadioGroup.types';
 import { compose, IUseComposeStyling } from '@uifabricshared/foundation-compose';
 import { ISlots, withSlots } from '@uifabricshared/foundation-composable';
@@ -23,7 +23,11 @@ export const RadioGroupContext = React.createContext<IRadioGroupContext>({
   selectedKey: null,
   onChange: (/* key: string */) => {
     return;
-  }
+  },
+  updateSelectedButtonRef: (/* ref: React.RefObject<any>*/) => {
+    return;
+  },
+  buttonKeys: [],
 });
 
 export const RadioGroup = compose<IRadioGroupType>({
@@ -35,24 +39,34 @@ export const RadioGroup = compose<IRadioGroupType>({
     // This hook updates the Selected Button and calls the customer's onClick function. This gets called after a button is pressed.
     const data = useSelectedKey(selectedKey || defaultSelectedKey || null, userProps.onChange);
 
+    const [selectedButtonRef, setSelectedButtonRef] = React.useState(React.useRef<View>(null));
+
+    const onSelectButtonRef = React.useCallback(
+      (ref: React.RefObject<View>) => {
+        setSelectedButtonRef(ref);
+      },
+      [setSelectedButtonRef],
+    );
+
     const state: IRadioGroupState = {
       context: {
         selectedKey: selectedKey ?? data.selectedKey,
-        onChange: data.onKeySelect
-      }
+        onChange: data.onKeySelect,
+        updateSelectedButtonRef: onSelectButtonRef,
+      },
     };
 
     const styleProps = useStyling(userProps, (override: string) => state[override] || userProps[override]);
 
     const ariaRoles = {
       accessibilityRole: 'radiogroup',
-      accessibilityLabel: ariaLabel || label
+      accessibilityLabel: ariaLabel || label,
     };
 
     const slotProps = mergeSettings<IRadioGroupSlotProps>(styleProps, {
       root: { rest, ...ariaRoles },
       label: { children: label },
-      container: { isCircularNavigation: true }
+      container: { isCircularNavigation: true, defaultTabbableElement: selectedButtonRef },
     });
 
     return { slotProps, state };
@@ -61,6 +75,17 @@ export const RadioGroup = compose<IRadioGroupType>({
   render: (Slots: ISlots<IRadioGroupSlotProps>, renderData: IRadioGroupRenderData, ...children: React.ReactNode[]) => {
     if (renderData.state == undefined) {
       return null;
+    }
+
+    // Populate the buttonKeys array
+    if (children) {
+      /* eslint-disable @typescript-eslint/ban-ts-ignore */
+      // @ts-ignore - TODO, fix typing error
+      renderData.state.context.buttonKeys = React.Children.map(children, (child: React.ReactChild) => {
+        if (React.isValidElement(child)) {
+          return child.props.buttonKey;
+        }
+      });
     }
 
     return (
@@ -80,13 +105,13 @@ export const RadioGroup = compose<IRadioGroupType>({
   slots: {
     root: View,
     label: Text,
-    container: FocusZone
+    container: FocusZone,
   },
   styles: {
     root: [],
     label: [foregroundColorTokens, textTokens],
-    container: []
-  }
+    container: [],
+  },
 });
 
 export default RadioGroup;

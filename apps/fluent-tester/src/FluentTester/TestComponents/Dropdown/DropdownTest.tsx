@@ -1,43 +1,57 @@
-import * as React from 'react';
-import { Alert } from 'react-native';
-import { Link } from '@fluentui/react-native';
-import { Stack } from '@fluentui-react-native/stack';
-import { stackStyle } from '../Common/styles';
-import { DROPDOWN_TESTPAGE } from './consts';
-import { Test, TestSection, PlatformStatus } from '../Test';
+import * as React from "react";
+import { Text, View } from 'react-native';
+import { Button } from "@fluentui-react-native/button";
+import { DROPDOWN_TESTPAGE } from "./consts";
+import { Test, TestSection, PlatformStatus } from "../Test";
 
-const links: React.FunctionComponent<{}> = () => {
-  const doPress = (): void => {
-    Alert.alert('Alert.', 'You have been alerted.');
-  };
+interface CounterState {
+  counter : number;
+}
+class Counter extends React.Component<{}, CounterState, any> {
+  constructor(props) {
+    super(props);
+    this.state = { counter : 0 };
+    this.onClickHandler = this.onClickHandler.bind(this);
+  }
 
-  return (
-    <Stack style={stackStyle}>
-      <Link url="https://www.bing.com/" content="Click to navigate." />
-      <Link onPress={doPress} content="Click to alert." />
-    </Stack>
-  );
+  onClickHandler() {
+    this.setState(function(previousState : CounterState) {
+      return {counter : previousState.counter + 1}
+    });
+  }
+
+  render() {
+    return (
+      <View>
+        <Text>{this.state.counter}</Text>
+        <Button content="Increment" onClick={this.onClickHandler}/>
+      </View>
+    );
+  }
+}
+
+const counterTest : React.FunctionComponent<{}> = () => {
+  return <Counter/>;
 };
 
-const linkSections: TestSection[] = [
+const counterTestSections: TestSection[] = [
   {
-    name: 'Navigation and Alert',
+    name: "TODO",
     testID: DROPDOWN_TESTPAGE,
-    component: links,
+    component: counterTest,
   },
 ];
 
 export const DropdownTest: React.FunctionComponent<{}> = () => {
   const status: PlatformStatus = {
-    win32Status: 'Beta',
-    uwpStatus: 'Experimental',
-    iosStatus: 'Experimental',
-    macosStatus: 'Beta',
-    androidStatus: 'Backlog',
+    win32Status: "Experimental",
+    uwpStatus: "Experimental",
+    iosStatus: "Experimental",
+    macosStatus: "Experimental",
+    androidStatus: "Experimental",
   };
 
-  const description =
-    'With a Link, users can navigate to another page, window, or Help topic; display a definition; initiate a command; or choose an option. A Link indicates that it can be clicked, typically by being displayed using the visited or unvisited link system colors. Traditionally, Links are underlined as well, but that approach is often unnecessary and falling out of favor to reduce visual clutter.\n\nA Link is the lightest weight clickable control, and is often used to reduce the visual complexity of a design.';
+  const description = "TODO";
 
-  return <Test name="Link Test" description={description} sections={linkSections} status={status}></Test>;
+  return <Test name="Dropdown Test (Temp)" description={description} sections={counterTestSections} status={status}></Test>;
 };
